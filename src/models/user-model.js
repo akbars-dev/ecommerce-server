@@ -1,5 +1,4 @@
-const {model, Schema} = require('mongoose');
-
+const { model, Schema } = require('mongoose');
 
 const UserSchema = new Schema({
     firstName: { type: String, required: true },
@@ -9,11 +8,10 @@ const UserSchema = new Schema({
     lang: { type: String, required: true },
     birthdayDate: { type: String, required: true },
     orders: [{ type: Schema.Types.ObjectId, ref: 'order' }],
-    cashback: { type: Schema.Types.ObjectId, ref: 'cashback'},
-})
+    cashback: { type: Schema.Types.ObjectId, ref: 'cashback' },
+});
 
+// Correcting the text index to use the existing fields
+UserSchema.index({ firstName: 'text', lastName: 'text', telegramId: 'text' });
 
-
-module.exports = model('user', UserSchema)
-
-
+module.exports = model('user', UserSchema);
