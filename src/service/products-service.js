@@ -17,7 +17,9 @@ class ProductService {
     async update(id, data) {
         const condidation = await productModel.findByIdAndUpdate(id, data);
         if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi');
-        await fs.unlink(path.join(__dirname, '../', '../', 'public', condidation.photo), (err) => {if(err) console.log(err)});
+        if (data.photo) {
+            await fs.unlink(path.join(__dirname, '../', '../', 'public', condidation.photo), (err) => {if(err) console.log(err)});
+        }
 
 
         return condidation;
