@@ -88,14 +88,14 @@ class UserService {
     }
 
     async getUser(userId) {
-        const user = await userModel.findById(userId).populate('cashback');
+        const user = await userModel.findOne({ telegramId: userId }).populate('cashback');
         if (!user) throw ApiError.BadRequest('User topilmadi');
 
         return { firstName: user.firstName, lastName: user.lastName, barCode: user.cashback.barCode, cashbackBall: user.cashback.balance };
     }
 
     async getUserLang(userId) {
-        const user = await userModel.findById(userId);
+        const user = await userModel.findOne({ telegramId: userId });
         if (!user) throw ApiError.BadRequest('User topilmadi');
 
         return user.lang;
