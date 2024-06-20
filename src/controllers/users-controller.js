@@ -81,6 +81,14 @@ class UserController {
             next(error)
         }
     }
+    async checkUser(req, res, next) {
+        try {
+            const data = await usersService.checkUser(req.params.id);
+            return res.json({ status: 200, message: 'Foydalanuvchi tekshirildi', data: data });
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 

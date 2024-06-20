@@ -111,6 +111,12 @@ class UserService {
         return users
     }
 
+    async checkUser(telegramId) {
+        const user = await userModel.findOne({ telegramId });
+        if(!user) return true
+        else return false
+    }
+
 }
 
 
