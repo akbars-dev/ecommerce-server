@@ -101,6 +101,16 @@ class UserService {
         return user.lang;
     }
 
+    async getTelegramId() {
+        const usersTelegramID = await userModel.find().select('telegramId');
+        return usersTelegramID
+    }
+
+    async getTelegramIdAndBithday() {
+        const users = await userModel.find().select('telegramId').select('birthdayDate').select('firstName').select('lastName');
+        return users
+    }
+
 }
 
 

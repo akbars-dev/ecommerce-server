@@ -63,6 +63,24 @@ class UserController {
             next(error)
         }
     }
+
+    async getTelegramId(req, res, next) {
+        try {
+            const data = await usersService.getTelegramId();
+            return res.json({ status: 200, message: 'Telegram aydilar', data: data });
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getTelegramIdAndBithday(req, res, next) {
+        try {
+            const data = await usersService.getTelegramIdAndBithday();
+            return res.json({ status: 200, message: 'Telegram aydi va sanalar', data: data });
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 
