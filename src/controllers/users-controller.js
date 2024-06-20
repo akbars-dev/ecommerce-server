@@ -37,9 +37,8 @@ class UserController {
 
     async getUser(req, res, next) {
         try {
-            const data = await usersService.cashbackAction(req.params.id, balance, type);
-
-            return res.json({ status: 200, message: "Cashback yangilandi", data: data });
+            const data = await usersService.getUser(req.params.id);
+            return res.json({ status: 200, message: "User topildi", data: data });
         } catch (error) {
             next(error)
         }
