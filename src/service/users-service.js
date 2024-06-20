@@ -76,6 +76,13 @@ class UserService {
         }
     }
 
+    async getUser(userId) {
+        const user = await userModel.findById(userId);
+        if (!user) throw ApiError.BadRequest('User topilmadi');
+
+        return user;
+    }
+
 }
 
 
