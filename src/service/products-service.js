@@ -5,11 +5,11 @@ const path = require('path');
 
 
 class ProductService {
-    async create(name, description, photoPath, price, category, subCategory) {
-        const condidation = await productModel.findOne({ name: name });
+    async create(uz, ru, photoPath, price, category, subCategory) {
+        const condidation = await productModel.findOne({ uz: {name: uz.name.trim()}, ru: {name: ru.name.trim()}  });
 
         if (condidation) throw ApiError.BadRequest('Bunday mahsulot oldin yaratilgan');
-        const product = await productModel.create({ name, description, photo: photoPath, price, category, subCategory });
+        const product = await productModel.create({ ru, uz, photo: photoPath, price, category, subCategory });
 
         return product;
     }
@@ -43,12 +43,24 @@ class ProductService {
 
     async all(page, limit, filter) {
         if (filter.type == 'category') {
+            if (!page || !limit) {
+                const data = await productModel.find({});
+                return data;
+            }
             const data = await productModel.find({ category: filter.id }).skip((page - 1) * limit).limit(limit);
             return data;
         } else if (filter.type == 'sub-category') {
+            if (!page || !limit) {
+                const data = await productModel.find({});
+                return data;
+            }
             const data = await productModel.find({ subCategory: filter.id }).skip((page - 1) * limit).limit(limit);
             return data;
         } else {
+            if (!page || !limit) {
+                const data = await productModel.find({});
+                return data;
+            }
             const data = await productModel.find({ }).skip((page - 1) * limit).limit(limit);
             return data;
         }

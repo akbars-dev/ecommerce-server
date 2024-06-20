@@ -2,7 +2,12 @@ const { model, Schema } = require('mongoose');
 
 
 const SubCategoriesSchema = new Schema({
-    name: { type: String, required: true },
+    uz: {
+        name: { type: String, required: true },
+    },
+    ru: {
+        name: { type: String, required: true },
+    },
     category: {
         type: Schema.Types.ObjectId,
         ref: 'categories',

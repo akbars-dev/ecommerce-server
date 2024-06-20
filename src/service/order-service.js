@@ -20,6 +20,10 @@ class OrderService {
     }
 
     async all(page, limit) {
+        if (!page || !limit) {
+            const orders = await orderModel.find({});
+            return orders;
+        }
         const orders = await  orderModel.find({}).skip((page - 1) * limit).limit(limit)
         return orders;
     }

@@ -3,10 +3,10 @@ const subCateogriesModel = require("../models/subCateogries-model");
 
 
 class SubCategoriesService {
-    async create(name, categoryId) {
-        const condidation = await subCateogriesModel.findOne({ name });
+    async create(uz, ru, categoryId) {
+        const condidation = await subCateogriesModel.findOne({ uz: { name: uz.name.trim() }, ru: { name: ru.name.trim() } });
         if (condidation) throw ApiError.BadRequest('Bunday sub kategoriya avval bor edi');
-        const subCategory = await subCateogriesModel.create({ name: name, category: categoryId });
+        const subCategory = await subCateogriesModel.create({ uz, ru, category: categoryId });
 
         return subCategory;
     }
@@ -26,6 +26,10 @@ class SubCategoriesService {
     }
 
     async all(page, limit) {
+        if (!page || !limit) {
+            const subCategories = await subCateogriesModel.find({});
+            return subCategories;
+        }
         const subCategories = await subCateogriesModel.find().skip((page - 1) * limit).limit(limit);
         return subCategories;
     }
@@ -34,7 +38,10 @@ class SubCategoriesService {
         const subCategory = await subCateogriesModel.findById(id);
         if (!subCategory) throw ApiError.BadRequest('Aydi xato kiritildi');
 
-        return subCategory;
+        const products = await productsModel.find({ subCategory: subCategory._id });
+
+
+        return { subCategory, products };
     }
 }
 

@@ -3,10 +3,14 @@ const productService = require('../service/products-service')
 class ProductController {
     async create(req, res, next) {
         try {
-            const { name, description, price, category, subCategory } = req.body;
+            const { uzName, uzDescription, ruName, ruDescription, price, category, subCategory } = req.body;
             const { filename } = req.file;
 
-            const product = await productService.create(name, description, filename, price, category, subCategory);
+            const product = await productService.create(
+                { name: uzName, description: uzDescription },
+                { name: ruName, description: ruDescription },
+                filename, price, category, subCategory
+            );
             return res.json({ status: 201, message: 'Mahsulot yaratildi', data: product });
         } catch (error) {
             next(error)

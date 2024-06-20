@@ -13,6 +13,17 @@ class UserController {
         }
     }
 
+    async update(req, res, next) {
+        try {
+            const { lang, telephone } = req.body;
+            const data = await usersService.update(req.params.id, { lang, telephone });
+
+            return res.json({ status: 200, message: "Xaridor yanglilandi", data: data })
+        } catch (error) {
+            next(error)
+        }
+    }
+
     async search(req, res, next) {
         try {
             const q = req.query.q;
@@ -39,6 +50,15 @@ class UserController {
         try {
             const data = await usersService.getUser(req.params.id);
             return res.json({ status: 200, message: "User topildi", data: data });
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getUserLang(req, res, next) {
+        try {
+            const data = await usersService.getUserLang(req.params.id);
+            return res.json({ status: 200, message: "User tili", data: data });
         } catch (error) {
             next(error)
         }

@@ -4,9 +4,9 @@ const categoriesService = require("../service/categories-service");
 class CategoriesController {
     async create(req, res, next) {
         try {
-            const { name } = req.body;
+            const { uz, ru } = req.body;
 
-            const category = await categoriesService.create(name);
+            const category = await categoriesService.create(uz, ru);
             return res.json({ status: 201, message: 'Kategoriya yaratildi', data: category })
         } catch (error) {
             next(error)

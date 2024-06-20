@@ -4,8 +4,8 @@ const subCategoriesService = require("../service/subCategories-service");
 class SubCategoriesController {
     async create(req, res, next) {
         try {
-            const { name, categoryId } = req.body;
-            const data = await subCategoriesService.create(name, categoryId);
+            const { uz, ru, categoryId } = req.body;
+            const data = await subCategoriesService.create(uz, ru, categoryId);
 
             return res.json({ status: 201, message: 'Sub Kategoriya yaratildi', data: data })
         } catch (error) {

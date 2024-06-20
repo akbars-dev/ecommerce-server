@@ -1,8 +1,13 @@
-const {model, Schema} = require('mongoose');
+const { model, Schema } = require('mongoose');
 
 
 const CategoriesSchema = new Schema({
-    name: { type: String, required: true },
+    uz: {
+        name: { type: String, required: true },
+    },
+    ru: {
+        name: { type: String, required: true },
+    }
 })
 
 

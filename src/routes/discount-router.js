@@ -9,6 +9,7 @@ discountRouter.post('/create', multerUtil.single('photo') ,discountController.cr
 discountRouter.put('/update/:id', discountController.update);
 discountRouter.delete('/delete/:id', discountController.delete);
 discountRouter.get('/all', discountController.all);
+discountRouter.get('/get/:id', discountController.get);
 
 
 module.exports = discountRouter;

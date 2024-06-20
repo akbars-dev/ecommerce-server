@@ -14,14 +14,25 @@ class UserService {
         return { user, cashback }
     }
 
+    async update(id, data) {
+        const condidation = await userModel.findByIdAndUpdate(id, data, { new: true });
+        if (!condidation) throw ApiError.BadRequest('Aydi xato kiritilgan');
+
+        return condidation
+    }
+
     async all(page, limit) {
-        const users = await userModel.find({}).skip((page - 1) * limit).limit(limit);
+        if (!page || !limit) {
+            const users = await userModel.find({});
+            return users;
+        }
+        const users = await userModel.find({}).skip((page || 1 - 1) * limit).limit(limit || 10);
         return users;
     }
 
     async search(query) {
-        if (query.length==0) throw ApiError.BadRequest('Query ichida malumot yoq')
-            const regexQuery = { $regex: query, $options: 'i' };
+        if (query.length == 0) throw ApiError.BadRequest('Query ichida malumot yoq')
+        const regexQuery = { $regex: query, $options: 'i' };
 
         const results = await userModel.aggregate([
             {
@@ -77,10 +88,17 @@ class UserService {
     }
 
     async getUser(userId) {
+        const user = await userModel.findById(userId).populate('cashback');
+        if (!user) throw ApiError.BadRequest('User topilmadi');
+
+        return { firstName: user.firstName, lastName: user.lastName, barCode: user.cashback.barCode, cashbackBall: user.cashback.balance };
+    }
+
+    async getUserLang(userId) {
         const user = await userModel.findById(userId);
         if (!user) throw ApiError.BadRequest('User topilmadi');
 
-        return user;
+        return user.lang;
     }
 
 }

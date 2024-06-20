@@ -1,13 +1,15 @@
 const ApiError = require("../errors/api-error");
 const categoriesModel = require("../models/categories-model");
+const subCateogriesModel = require("../models/subCateogries-model");
+const productsModel = require("../models/product-model");
 
 
 
 class CategoriesService {
-    async create(name) {
-        const condidation = await categoriesModel.findOne({ name: name.trim() });
+    async create(uz, ru) {
+        const condidation = await categoriesModel.findOne({ uz: {name: uz.name.trim()}, ru: {name: ru.name.trim()}  });
         if (condidation) throw ApiError.BadRequest('Bunday kategoriya oldin yaratilgan');
-        const category = await categoriesModel.create({ name: name.trim() });
+        const category = await categoriesModel.create({ uz, ru });
 
         return category;
     }
@@ -27,8 +29,11 @@ class CategoriesService {
     }
 
     async all(page, limit) {
+        if (!page || !limit) {
+            const categories = await categoriesModel.find({});
+            return categories;
+        }
         const categories = await categoriesModel.find().skip((page - 1) * limit).limit(limit);
-
         return categories;
     }
 
@@ -36,7 +41,10 @@ class CategoriesService {
         const category = await categoriesModel.findById(id);
         if (!category) throw ApiError.BadRequest('Aydi xato kiritildi');
 
-        return category;
+        const subCategories = await subCateogriesModel.find({ category: category._id });
+        const products = await productsModel.find({category: category._id});
+
+        return {category, subCategories, products};
     }
 }
 

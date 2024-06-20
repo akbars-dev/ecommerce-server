@@ -1,12 +1,12 @@
-const discountService = require('../service/discount-service'); 
+const discountService = require('../service/discount-service');
 
 class DiscountController {
     async create(req, res, next) {
         try {
-            const { name, description, price } = req.body;
+            const { uzName, uzDescription, ruName, ruDescription, price } = req.body;
             const photoPath = req.file.filename;
 
-            const data = await discountService.create(name, description, price, photoPath);
+            const data = await discountService.create({ name: uzName, description: uzDescription }, { name: ruName, description: ruDescription }, price, photoPath);
             return res.json({ status: 201, message: "Aksiya yaratildi", data: data });
         } catch (error) {
             next(error)
@@ -15,10 +15,10 @@ class DiscountController {
 
     async update(req, res, next) {
         try {
-            const { name, description, price } = req.body;
+            const { uzName, uzDescription, ruName, ruDescription, price } = req.body;
             const photoPath = req.file?.filename;
-            
-            const data = await discountService.update(req.params.id, { name, description, price, photoPath });
+
+            const data = await discountService.update(req.params.id, { uz: { name: uzName, description: uzDescription }, ru: { name: ruName, description: ruDescription }, price, photoPath });
             return res.json({ status: 200, message: "Aksiya yangilandi", data: data });
         } catch (error) {
             next(error);
@@ -28,13 +28,22 @@ class DiscountController {
     async delete(req, res, next) {
         try {
             const data = await discountService.delete(req.params.id);
-            return res.json({ satatus: 200, message:"Aksiya o'chirildi", data: data });
+            return res.json({ satatus: 200, message: "Aksiya o'chirildi", data: data });
         } catch (error) {
             next(error);
         }
     }
 
-    async all (req, res, next) {
+    async get(req, res, next) {
+        try {
+            const data = await discountService.get(req.params.id);
+            return res.json({ status: 200, message: "Chegirma topdildi", data: data });
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async all(req, res, next) {
         try {
             const data = await discountService.all(req.query.page, req.query.limit);
             return res.json({ status: 200, message: "Barcha aksiyalar", data: data });
