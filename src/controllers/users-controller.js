@@ -5,9 +5,9 @@ class UserController {
     async create(req, res, next) {
         try {
             const { firstName, lastName, telephone, telegramId, lang, birthdayDate, barCode } = req.body;
-            
+
             const data = await usersService.create(firstName, lastName, telephone, telegramId, lang, birthdayDate, barCode, req.file.filename);
-            return res.json({ status: 201, message: "User yaratildi", data:data })
+            return res.json({ status: 201, message: "User yaratildi", data: data })
         } catch (error) {
             next(error)
         }
@@ -29,7 +29,7 @@ class UserController {
             const q = req.query.q;
             const results = await usersService.search(q);
 
-            return res.json({status: 200, message: "Izlagan malumotlaringiz", data: results})
+            return res.json({ status: 200, message: "Izlagan malumotlaringiz", data: results })
         } catch (error) {
             next(error)
         }
@@ -50,6 +50,15 @@ class UserController {
         try {
             const data = await usersService.getUser(req.params.id);
             return res.json({ status: 200, message: "User topildi", data: data });
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getAllBarcodes(req, res, next) {
+        try {
+            const data = await usersService.getAllBarcodes();
+            return res.json({ status: 200, message: "Barcha keshbeklar", data: data })
         } catch (error) {
             next(error)
         }

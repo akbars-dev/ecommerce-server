@@ -15,10 +15,15 @@ class UserService {
     }
 
     async update(id, data) {
-        const condidation = await userModel.findByIdAndUpdate(id, data, { new: true });
+        const condidation = await userModel.findOneAndUpdate({ telegramId: id }, data, { new: true });
         if (!condidation) throw ApiError.BadRequest('Aydi xato kiritilgan');
 
         return condidation
+    }
+
+    async getAllBarcodes() {
+        const barcodes = await userModel.find({}).select('barCode');
+        return barcodes
     }
 
     async all(page, limit) {
@@ -113,7 +118,7 @@ class UserService {
 
     async checkUser(telegramId) {
         const user = await userModel.findOne({ telegramId });
-        if(!user) return false
+        if (!user) return false
         else return true
     }
 

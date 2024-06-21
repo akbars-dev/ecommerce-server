@@ -8,6 +8,7 @@ const userRouter = Router();
 userRouter.post('/create', multerUtil.single('photo'), usersController.create);
 userRouter.get('/get/:id', usersController.getUser);
 userRouter.get('/get-lang/:id', usersController.getUserLang);
+userRouter.get('/get-barcodes/:id', usersController.getUserLang);
 userRouter.get('/get-tg/', usersController.getTelegramId);
 userRouter.get('/check/:id', usersController.checkUser);
 userRouter.get('/get-tg-birthday/', usersController.getTelegramIdAndBithday);
