@@ -21,6 +21,8 @@ class UserService {
         return condidation
     }
 
+
+
     async getAllBarcodes() {
         const barcodes = await userModel.find({}).select('barCode');
         return barcodes
@@ -113,6 +115,11 @@ class UserService {
 
     async getTelegramIdAndBithday() {
         const users = await userModel.find().select('telegramId').select('birthdayDate').select('firstName').select('lastName');
+        return users
+    }
+
+    async getUserByTelegram(telegramId) {
+        const users = await userModel.find({ telegramId });
         return users
     }
 

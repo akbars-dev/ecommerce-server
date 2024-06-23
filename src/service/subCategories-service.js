@@ -1,4 +1,5 @@
 const ApiError = require("../errors/api-error");
+const productModel = require("../models/product-model");
 const subCateogriesModel = require("../models/subCateogries-model");
 
 
@@ -11,9 +12,9 @@ class SubCategoriesService {
         return subCategory;
     }
 
-    async update(id, name) {
-        const condidation = await subCateogriesModel.findByIdAndUpdate(id, { name: name }, { new: true });
-        if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi');
+    async update(id, data) {
+        const condidation = await subCateogriesModel.findByIdAndUpdate(id, data, { new: true });
+        if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi'); 
 
         return condidation;
     }
@@ -27,10 +28,10 @@ class SubCategoriesService {
 
     async all(page, limit) {
         if (!page || !limit) {
-            const subCategories = await subCateogriesModel.find({});
+            const subCategories = await subCateogriesModel.find({}).populate('category');
             return subCategories;
         }
-        const subCategories = await subCateogriesModel.find().skip((page - 1) * limit).limit(limit);
+        const subCategories = await subCateogriesModel.find().skip((page - 1) * limit).limit(limit).populate('category');
         return subCategories;
     }
 
@@ -38,7 +39,8 @@ class SubCategoriesService {
         const subCategory = await subCateogriesModel.findById(id);
         if (!subCategory) throw ApiError.BadRequest('Aydi xato kiritildi');
 
-        const products = await productsModel.find({ subCategory: subCategory._id });
+        console.log(subCategory._id);
+        const products = await productModel.find({ subCategory: subCategory._id });
 
 
         return { subCategory, products };

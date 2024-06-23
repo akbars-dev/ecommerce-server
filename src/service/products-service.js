@@ -6,7 +6,7 @@ const path = require('path');
 
 class ProductService {
     async create(uz, ru, photoPath, price, category, subCategory) {
-        const condidation = await productModel.findOne({ uz: {name: uz.name.trim()}, ru: {name: ru.name.trim()}  });
+        const condidation = await productModel.findOne({ uz: { name: uz.name }, ru: { name: ru.name } });
 
         if (condidation) throw ApiError.BadRequest('Bunday mahsulot oldin yaratilgan');
         const product = await productModel.create({ ru, uz, photo: photoPath, price, category, subCategory });
@@ -18,7 +18,7 @@ class ProductService {
         const condidation = await productModel.findByIdAndUpdate(id, data);
         if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi');
         if (data.photo) {
-            await fs.unlink(path.join(__dirname, '../', '../', 'public', condidation.photo), (err) => {if(err) console.log(err)});
+            await fs.unlink(path.join(__dirname, '../', '../', 'public', condidation.photo), (err) => { if (err) console.log(err) });
         }
 
 
@@ -29,7 +29,7 @@ class ProductService {
         const condidation = await productModel.findByIdAndDelete(id);
         if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi');
 
-        await fs.unlink(path.join(__dirname, '../', '../', 'public', condidation.photo), (err) => {if(err) console.log(err)});
+        await fs.unlink(path.join(__dirname, '../', '../', 'public', condidation.photo), (err) => { if (err) console.log(err) });
 
         return condidation;
     }
@@ -44,24 +44,34 @@ class ProductService {
     async all(page, limit, filter) {
         if (filter.type == 'category') {
             if (!page || !limit) {
-                const data = await productModel.find({});
+                const data = await productModel.find({})
+                    .populate('category')
+                    .populate('subCategory');
                 return data;
             }
-            const data = await productModel.find({ category: filter.id }).skip((page - 1) * limit).limit(limit);
+            const data = await productModel.find({ category: filter.id }).skip((page - 1) * limit).limit(limit).populate('category').populate('subCategory');
             return data;
         } else if (filter.type == 'sub-category') {
             if (!page || !limit) {
-                const data = await productModel.find({});
+                const data = await productModel.find({})
+                    .populate('category')
+                    .populate('subCategory');;
                 return data;
             }
-            const data = await productModel.find({ subCategory: filter.id }).skip((page - 1) * limit).limit(limit);
+            const data = await productModel.find({ subCategory: filter.id }).skip((page - 1) * limit).limit(limit)
+                .populate('category')
+                .populate('subCategory');;
             return data;
         } else {
             if (!page || !limit) {
-                const data = await productModel.find({});
+                const data = await productModel.find({})
+                    .populate('category')
+                    .populate('subCategory');;
                 return data;
             }
-            const data = await productModel.find({ }).skip((page - 1) * limit).limit(limit);
+            const data = await productModel.find({}).skip((page - 1) * limit).limit(limit)
+                .populate('category')
+                .populate('subCategory');;
             return data;
         }
     }

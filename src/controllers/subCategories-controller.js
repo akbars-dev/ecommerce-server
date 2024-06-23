@@ -16,7 +16,7 @@ class SubCategoriesController {
     async update(req, res, next) {
         try {
             const { name } = req.body;
-            const data = await subCategoriesService.update(req.params.id, name);
+            const data = await subCategoriesService.update(req.params.id, req.body);
 
             return res.json({ status: 200, message: 'Sub Kategoriya yangilandi', data: data })
         } catch (error) {

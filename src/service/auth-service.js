@@ -22,16 +22,22 @@ class AuthService {
     }
 
     async refresh(refreshToken) {
+        console.log(refreshToken);
         if (!refreshToken) {
+            console.log('sss123');
             throw ApiError.UnauthorizedError();
         }
         const userData = tokenService.validateRefreshToken(refreshToken);
+        console.log('userData:', userData);
         const tokenFromDb = await tokenService.findToken(refreshToken);
+        console.log(tokenFromDb);
         if (!userData || !tokenFromDb) {
+            console.log('sss');
             throw ApiError.UnauthorizedError();
         }
         const admin = await adminModel.findById(userData.id);
-        const tokens = tokenService.generateTokens({ adminName: admin.adminName, role: admin.role });
+        console.log('admin', admin);
+        const tokens = tokenService.generateTokens({ id: admin.id, adminName: admin.adminName, role: admin.role });
 
         await tokenService.saveToken(admin._id, tokens.refreshToken);
         return { ...tokens, admin: admin }

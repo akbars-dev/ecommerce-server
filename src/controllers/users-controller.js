@@ -15,8 +15,8 @@ class UserController {
 
     async update(req, res, next) {
         try {
-            const { lang, telephone } = req.body;
-            const data = await usersService.update(req.params.id, { lang, telephone });
+            const { lang, telephone, birthdayDate } = req.body;
+            const data = await usersService.update(req.params.id, { lang, telephone, birthdayDate });
 
             return res.json({ status: 200, message: "Xaridor yanglilandi", data: data })
         } catch (error) {
@@ -52,6 +52,15 @@ class UserController {
             return res.json({ status: 200, message: "User topildi", data: data });
         } catch (error) {
             next(error)
+        }
+    }
+
+    async getUserByTelegramId(req, res, next) {
+        try {
+            const data = await usersService.getUserByTelegram(req.params.id);
+            return res.json({ status: 200, message: "User topildi", data: data });
+        } catch (error) {
+            next(error);
         }
     }
 

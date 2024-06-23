@@ -15,9 +15,7 @@ class CategoriesController {
 
     async update(req, res, next) {
         try {
-            const { name } = req.body;
-
-            const category = await categoriesService.update(req.params.id, name);
+            const category = await categoriesService.update(req.params.id, req.body);
             return res.json({ status: 200, message: 'Kategoriya yangilandi', data: category })
         } catch (error) {
             next(error)

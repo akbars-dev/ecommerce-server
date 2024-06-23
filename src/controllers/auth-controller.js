@@ -6,7 +6,14 @@ class AuthController {
         try {
             const { adminName, password } = req.body;
             const data = await authService.login(adminName, password);
-            res.cookie('refreshToken', data.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+            res.cookie('refreshToken', data.refreshToken,
+                { 
+                    maxAge: 30 * 24 * 60 * 60 * 1000, 
+                    httpOnly: true,
+                    sameSite: 'Strict', 
+                    secure: false, 
+                }
+            );
 
 
             return res.json({ status: 200, message: 'Admin Akkauntiga kirdi', data: data })
@@ -32,7 +39,12 @@ class AuthController {
         try {
             const { refreshToken } = req.cookies;
             const data = await authService.refresh(refreshToken);
-            res.cookie('refreshToken', data.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+            res.cookie('refreshToken', data.refreshToken, { 
+                maxAge: 30 * 24 * 60 * 60 * 1000, 
+                httpOnly: true,
+                sameSite: 'Strict', 
+                secure: false, 
+            });
 
             return res.json({ status: 200, message: 'Admin akkaunti yangilandi chiqdi', data: data })
         } catch (e) {

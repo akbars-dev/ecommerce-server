@@ -7,15 +7,15 @@ const productsModel = require("../models/product-model");
 
 class CategoriesService {
     async create(uz, ru) {
-        const condidation = await categoriesModel.findOne({ uz: {name: uz.name.trim()}, ru: {name: ru.name.trim()}  });
+        const condidation = await categoriesModel.findOne({ uz: { name: uz.name }, ru: { name: ru.name } });
         if (condidation) throw ApiError.BadRequest('Bunday kategoriya oldin yaratilgan');
         const category = await categoriesModel.create({ uz, ru });
 
         return category;
     }
 
-    async update(id, name) {
-        const condidation = await categoriesModel.findByIdAndUpdate(id, { name }, { new: true });
+    async update(id, data) {
+        const condidation = await categoriesModel.findByIdAndUpdate(id, data, { new: true });
         if (!condidation) throw ApiError.BadRequest('Aydi xato kiritilgan');
 
         return condidation;
@@ -42,9 +42,9 @@ class CategoriesService {
         if (!category) throw ApiError.BadRequest('Aydi xato kiritildi');
 
         const subCategories = await subCateogriesModel.find({ category: category._id });
-        const products = await productsModel.find({category: category._id});
+        const products = await productsModel.find({ category: category._id });
 
-        return {category, subCategories, products};
+        return { category, subCategories, products };
     }
 }
 
