@@ -20,7 +20,7 @@ class AuthService {
         const token = await tokenService.removeToken(refreshToken);
         return token;
     }
-
+  
     async refresh(refreshToken) {
         console.log(refreshToken);
         if (!refreshToken) {

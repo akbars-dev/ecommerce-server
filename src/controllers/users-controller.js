@@ -1,3 +1,4 @@
+const ApiError = require("../errors/api-error");
 const usersService = require("../service/users-service");
 
 
@@ -38,7 +39,12 @@ class UserController {
     async cashbackAction(req, res, next) {
         try {
             const { balance, type } = req.body;
-            const data = await usersService.cashbackAction(req.params.id, balance, type);
+            const accessToken = await req.headers.authorization;
+            console.log(accessToken);
+
+            if(!accessToken) throw ApiError.UnauthorizedError();
+
+            const data = await usersService.cashbackAction(req.params.id, balance, type, accessToken.split(' ')[1]);
 
             return res.json({ status: 200, message: "Cashback yangilandi", data: data });
         } catch (error) {
@@ -50,6 +56,15 @@ class UserController {
         try {
             const data = await usersService.getUser(req.params.id);
             return res.json({ status: 200, message: "User topildi", data: data });
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async all(req, res, next) {
+        try {
+            const data = await usersService.all();
+            return res.json({ status: 200, message: "Userlar topildi", data: data });
         } catch (error) {
             next(error)
         }

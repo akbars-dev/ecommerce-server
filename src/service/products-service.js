@@ -15,7 +15,14 @@ class ProductService {
     }
 
     async update(id, data) {
-        const condidation = await productModel.findByIdAndUpdate(id, data);
+        const condidation = await productModel.findByIdAndUpdate(id, {
+            uz: { name: data.uzName, description: data.uzDescription },
+            ru: { name: data.ruName, description: data.ruDescription },
+            price: data.price,
+            category: data.category,
+            subCategory: data.subCategory,
+            photo: data.photo
+        });
         if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi');
         if (data.photo) {
             await fs.unlink(path.join(__dirname, '../', '../', 'public', condidation.photo), (err) => { if (err) console.log(err) });
@@ -35,7 +42,7 @@ class ProductService {
     }
 
     async get(id) {
-        const condidation = await productModel.findById(id);
+        const condidation = await productModel.findById(id).populate('category').populate('subCategory');
         if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi');
 
         return condidation;

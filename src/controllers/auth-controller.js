@@ -5,6 +5,7 @@ class AuthController {
     async login(req, res, next) {
         try {
             const { adminName, password } = req.body;
+            console.log('admin', adminName);
             const data = await authService.login(adminName, password);
             res.cookie('refreshToken', data.refreshToken,
                 { 

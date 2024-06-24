@@ -1,6 +1,8 @@
 const ApiError = require('../errors/api-error');
 const cashbackModel = require('../models/cashback-model');
+const historyModel = require('../models/history-model');
 const userModel = require('../models/user-model');
+const { validateAccessToken } = require('./token-service');
 
 
 
@@ -30,10 +32,10 @@ class UserService {
 
     async all(page, limit) {
         if (!page || !limit) {
-            const users = await userModel.find({});
+            const users = await userModel.find({}).populate('cashback');
             return users;
         }
-        const users = await userModel.find({}).skip((page || 1 - 1) * limit).limit(limit || 10);
+        const users = await userModel.find({}).skip((page || 1 - 1) * limit).limit(limit || 10).populate('cashback');
         return users;
     }
 
@@ -80,15 +82,19 @@ class UserService {
         return results;
     }
 
-    async cashbackAction(id, balance, type) {
+    async cashbackAction(id, balance, type, accessToken) {
         const user = await userModel.findById(id);
         const cashback = await cashbackModel.findById(user.cashback);
+        const admin = await validateAccessToken(accessToken);
+        console.log(admin);
         if (type == "plus") {
-            cashback.balance += balance;
+            cashback.balance += Number(balance);
+            await historyModel.create({ admin: admin.id, amount: balance, type: type });
             await cashback.save();
             return cashback;
         } else if (type == "minus") {
-            cashback.balance -= balance;
+            cashback.balance -= Number(balance);
+            await historyModel.create({ admin: admin.id, amount: balance, type: type });
             await cashback.save();
             return cashback;
         }

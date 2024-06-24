@@ -16,7 +16,7 @@ class DiscountService {
         const condidation = await discountModel.findByIdAndUpdate(id, data);
         if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi');
         if (data.photoPath) {
-            await fs.unlink(path.join(__dirname, '../', '../', 'public', condidation.photo), (err) => { if (err) console.log(err) });
+            await fs.unlink(path.join(__dirname, '../', '../', 'public', condidation.photoPath), (err) => { if (err) console.log(err) });
         }
 
         return condidation

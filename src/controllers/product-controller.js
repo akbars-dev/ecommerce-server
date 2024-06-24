@@ -19,6 +19,7 @@ class ProductController {
 
     async update(req, res, next) {
         try {
+            console.log('body', { photo: req.file?.filename, ...req.body });
             const product = await productService.update(req.params.id, { photo: req.file?.filename, ...req.body });
             return res.json({ status: 200, message: "Mahsulot yangilandi", data: product });
         } catch (error) {

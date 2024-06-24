@@ -7,6 +7,7 @@ const userRouter = Router();
 
 userRouter.post('/create', multerUtil.single('photo'), usersController.create);
 userRouter.get('/get/:id', usersController.getUser);
+userRouter.get('/all', usersController.all);
 userRouter.get('/get-telegram/:id', usersController.getUserByTelegramId);
 userRouter.get('/get-lang/:id', usersController.getUserLang);
 userRouter.get('/get-barcodes/', usersController.getUserLang);

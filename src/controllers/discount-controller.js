@@ -15,11 +15,31 @@ class DiscountController {
 
     async update(req, res, next) {
         try {
-            const { uzName, uzDescription, ruName, ruDescription, price } = req.body;
             const photoPath = req.file?.filename;
+            const discount = await discountService.get(req.params.id)
 
-            const data = await discountService.update(req.params.id, { uz: { name: uzName, description: uzDescription }, ru: { name: ruName, description: ruDescription }, price, photoPath });
-            return res.json({ status: 200, message: "Aksiya yangilandi", data: data });
+            if (req.file) {
+                console.log('Body', req.body.uzName);
+
+                const data = await discountService.update(req.params.id, {
+                    uz: { name: req.body.uzName, description: req.body.uzDescription },
+                    ru: { name: req.body.ruName, description: req.body.ruDescription },
+                    price: req.body.price,
+                    photoPath
+                });
+                return res.json({ status: 200, message: "Aksiya yangilandi", data: data });
+
+            } else {
+                const data = await discountService.update(req.params.id, {
+                    uz: { name: req.body.uzName, description: req.body.uzDescription },
+                    ru: { name: req.body.ruName, description: req.body.ruDescription },
+                    price: req.body.price,
+                    photoPath: photoPath
+                });
+
+                return res.json({ status: 200, message: "Aksiya yangilandi", data: data });
+            }
+
         } catch (error) {
             next(error);
         }
