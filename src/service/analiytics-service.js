@@ -43,12 +43,12 @@ class AnaliyticsService {
                     foreignField: '_id',
                     as: 'user'
             },
-        {
+    
             $unwind: 'user'
-        },
-        {
+    
+        
             $sort: { ordersCount: -1 } // Sort by ordersCount descending
-        }
+        
     })
         
         return { topProducts, topCostumers } 
