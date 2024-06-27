@@ -1,4 +1,4 @@
-const historiesModel = require('../models/histories-model.js');
+const historiesModel = require('../models/history-model.js');
 
 
 class HistoriesService {
