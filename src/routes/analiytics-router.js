@@ -3,7 +3,7 @@ const analiyticsController = require('../controllers/analiytics-controller.js');
 
 const analiyticsRouter = Router();
 
-analiyticsRouter.get('/top'. analiyticsController.top);
+analiyticsRouter.get('/top', analiyticsController.top);
 
 
 module.exports = analiyticsRouter;
