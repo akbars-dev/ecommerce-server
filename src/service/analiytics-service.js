@@ -36,14 +36,13 @@ class AnaliyticsService {
                     ordersCount: { $sum: 1 } // Count the number of orders per customer
                 },
         
-            {
+        
                 $lookup: {
                     from: 'users', // Collection name of Customer model
                     localField: '_id',
                     foreignField: '_id',
                     as: 'user'
-            }
-        },
+            },
         {
             $unwind: 'user'
         },
