@@ -12,6 +12,7 @@ const ProductSchema = new Schema({
     },
     photo: { type: String, required: true },
     price: { type: String, required: true },
+    ordersCount: {type: Number. required: true},
     subCategory: { type: Schema.Types.ObjectId, ref: 'sub-categories' },
     category: { type: Schema.Types.ObjectId, ref: 'categories' }
 })

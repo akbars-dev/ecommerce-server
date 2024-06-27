@@ -8,13 +8,17 @@ const mongoose = require('mongoose');
 
 class OrderService {
     async create(products, userId, price) {
-        const order = await orderModel.create({ products: products, price: price, author: userId });
+        const user = await userModel.findByIdAndUpdate(userId, {$inc: { ordersCount: 1 }}, {new: true});
         const onePercent = Number(price.split('$')[0]) * 0.01;
-        const user = await userModel.findById(userId);
         if (!user) throw ApiError.BadRequest('User aydi xato kiritildi');
         const cashback = await cashbackModel.findById(user.cashback);
         console.log(user.cashback)
         if (!cashback) throw ApiError.BadRequest('User aydi xato kiritildi');
+        products.forEach(val => {
+            await productModel.findByIdAndUpdate(val, { ordersCount: {$inc: 1 }, {new: true})
+        })
+        const order = await orderModel.create({ products: products, price: price, author: userId });
+
 
         cashback.balance += onePercent;
         await cashback.save();
