@@ -25,28 +25,28 @@ class AnaliyticsService {
                     orderCounts: 1,
                     productName: { $arrayElemAt: ['$product.name', 0] }
                 },
-                {
-                    $sort: { orderCounts: -1 }
-                }
+            },
+            {
+                $sort: {ordersCount: -1}
             }
         ])
         const topCostumers = await orderModel.aggregate({
             {
                 $group: {
-                    _id: '$customerId',
+                    _id: '$author',
                     ordersCount: { $sum: 1 } // Count the number of orders per customer
                 }
             },
             {
                 $lookup: {
-                    from: 'customers', // Collection name of Customer model
+                    from: 'users', // Collection name of Customer model
                     localField: '_id',
                     foreignField: '_id',
-                    as: 'customer'
+                    as: 'user'
             }
         },
         {
-            $unwind: '$customer'
+            $unwind: 'user'
         },
         {
             $sort: { ordersCount: -1 } // Sort by ordersCount descending
