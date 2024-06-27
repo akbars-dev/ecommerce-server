@@ -14,7 +14,7 @@ class OrderService {
         const cashback = await cashbackModel.findById(user.cashback);
         console.log(user.cashback)
         if (!cashback) throw ApiError.BadRequest('User aydi xato kiritildi');
-        products.forEach(val => {
+        products.forEach(async (val) => {
             await productModel.findByIdAndUpdate(val, { ordersCount: {$inc: 1 }, {new: true})
         })
         const order = await orderModel.create({ products: products, price: price, author: userId });
