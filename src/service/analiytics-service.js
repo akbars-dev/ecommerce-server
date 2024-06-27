@@ -31,12 +31,11 @@ class AnaliyticsService {
             }
         ])
         const topCostumers = await orderModel.aggregate({
-            {
                 $group: {
                     _id: '$author',
                     ordersCount: { $sum: 1 } // Count the number of orders per customer
-                }
-            },
+                },
+        
             {
                 $lookup: {
                     from: 'users', // Collection name of Customer model
