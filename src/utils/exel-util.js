@@ -11,7 +11,7 @@ async function createExelFile (data, fileName) {
         worksheet.addRow(Object.values(row));
     })
     
-    const workbook.xlsx.writeFile(fileName);
+    workbook.xlsx.writeFile(fileName);
 }
 
 module.exports = createExelFile;
