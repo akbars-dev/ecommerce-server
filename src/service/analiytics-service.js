@@ -1,5 +1,8 @@
 const orderModel = require('../models/order-model.js');
-
+const usersModel = require('../models/user-model.js');
+const productsModel = require('../models/product-model.js');
+const mongooseToXlsx = require('mongoose-to-xlsx');
+const path = require('path');
 
 class AnaliyticsService {
     async top() {
@@ -54,6 +57,19 @@ class AnaliyticsService {
     ])
         
         return { topProducts, topCostumers } 
+    }
+    
+    async getUserExel () {
+          const users = await usersModel.find({});
+          const usersData = users.map(user => user.toJSON());
+          
+          const filePath = path.join(__dirname, '../', '../'. 'public', 'users.xlsx');
+          await mongooseToXlsx(usersData, filePath, fnuction (err, data) => {
+              if (err) console.log(err);
+              console.log('exel file saved');
+          });
+          
+          return true
     }
 }
 
