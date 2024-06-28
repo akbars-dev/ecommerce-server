@@ -1,17 +1,17 @@
 const orderModel = require('../models/order-model.js');
 const usersModel = require('../models/user-model.js');
 const productsModel = require('../models/product-model.js');
-const createExelFile = require('../utils/exel-util.js');
+const createExcelFile = require('../utils/excel-util.js'); // Fixed spelling
 const path = require('path');
 
-class AnaliyticsService {
+class AnalyticsService {
     async top() {
         const topProducts = await orderModel.aggregate([
-            {  $unwind: '$products' },
+            { $unwind: '$products' },
             {
-                $gorup: {
+                $group: {
                     _id: '$products',
-                    orderCounts: { $sum: 1}
+                    orderCounts: { $sum: 1 }
                 }
             },
             {
@@ -30,40 +30,47 @@ class AnaliyticsService {
                 },
             },
             {
-                $sort: {ordersCount: -1}
+                $sort: { orderCounts: -1 }
             }
-        ])
-        const topCostumers = await orderModel.aggregate([
-        {
-            $group: {
-                _id: '$author',
-                ordersCount: { $sum: 1 } // Count the number of orders per customer
-            }
-        },
-        {
+        ]);
+
+        const topCustomers = await orderModel.aggregate([
+            {
+                $group: {
+                    _id: '$author',
+                    ordersCount: { $sum: 1 }
+                }
+            },
+            {
                 $lookup: {
-                    from: 'users', // Collection name of Customer model
+                    from: 'users',
                     localField: '_id',
                     foreignField: '_id',
                     as: 'user'
+                }
+            },
+            {
+                $unwind: '$user'
+            },
+            {
+                $project: {
+                    _id: 1,
+                    ordersCount: 1,
+                    userName: '$user.name'
+                }
+            },
+            {
+                $sort: { ordersCount: -1 }
             }
-        },
-        {
-            $unwind: 'user'
-        },
-        {
-            $sort: { ordersCount: -1 } // Sort by ordersCount descending
-        }
-    ])
-        
-        return { topProducts, topCostumers } 
+        ]);
+
+        return { topProducts, topCustomers };
     }
-    
-    async getUserExel () {
+
+    async getUserExcel() {
         const users = await usersModel.find({}).populate('cashback');
-        return users
+        return users;
     }
 }
 
-
-module.exports = new AnaliyticsService();
+module.exports = new AnalyticsService();
