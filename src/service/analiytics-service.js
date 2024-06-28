@@ -1,7 +1,6 @@
 const orderModel = require('../models/order-model.js');
 const usersModel = require('../models/user-model.js');
 const productsModel = require('../models/product-model.js');
-const createExcelFile = require('../utils/excel-util.js'); // Fixed spelling
 const path = require('path');
 
 class AnalyticsService {
