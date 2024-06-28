@@ -25,7 +25,7 @@ class AnalyticsService {
                 $project: {
                     _id: 1,
                     orderCounts: 1,
-                    productName: { $arrayElemAt: ['$product.name', 0] }
+                    productName: { $arrayElemAt: ['$product.uz.name', 0] }
                 },
             },
             {
