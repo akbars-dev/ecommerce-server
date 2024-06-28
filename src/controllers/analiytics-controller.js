@@ -13,6 +13,47 @@ class AnaliyticsController {
         }
     }
     
+    async getTopCostumersExcel(req, res, next) {
+        try {
+            const data = await analiyticsService.top();
+            
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Top Costumers');
+            
+            worksheet.columns = [
+                { header: 'ID', key: 'id', width: 10 },    
+                { header: 'Ismi', key: 'name', width: 20 },    
+                { header: 'Familiyasi', key: 'lastName', width: 20 },    
+                { header: 'Telefon raqami', key: 'telephone', width: 20 },    
+                { header: 'Tili', key: 'lang', width: 10 },    
+                { header: 'Tugilgan sanasi', key: 'birthdayDate', width: 20 },    
+                { header: 'Buyurtmalar soni', key: 'ordersCount', width: 20 },    
+            ];
+            
+            data.topCostumers.forEach((val, index) => {
+                worksheet.addRow({
+                    id: index+1,
+                    name: val.firstName,
+                    lastName: val.lastName,
+                    telephone: val.telephone,
+                    lang: val.lang,
+                    birthdayDate: val.birthdayDate,
+                    ordersCount: val.ordersCount
+                });
+            })
+            
+            res.setHeader('Content-Disposition', `attachment; filename=topCostumers.xlsx`);
+            res.setHeader('Content-Type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            
+            
+        await workbook.xlsx.write(res);
+
+        return res.end();
+        } catch(e) {
+            next(e);
+        }
+    }
+    
     async getUserExel(req, res, next){
         try {
             const data = await analiyticsService.getUserExel();

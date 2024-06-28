@@ -60,12 +60,8 @@ class AnaliyticsService {
     }
     
     async getUserExel () {
-          const users = await usersModel.find({}).populate('cashback');
-          
-        //   const filePath = path.join(__dirname, '../', '../', 'public', 'users.xlsx');
-        //   await createExelFile(users, filePath);
-          
-          return users
+        const users = await usersModel.find({}).populate('cashback');
+        return users
     }
 }
 
