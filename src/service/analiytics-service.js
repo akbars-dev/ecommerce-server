@@ -63,7 +63,7 @@ class AnaliyticsService {
           const users = await usersModel.find({});
           const usersData = users.toArray();
           
-          const filePath = path.join(__dirname, '../', '../'. 'public', 'users.xlsx');
+          const filePath = path.join(__dirname, '../', '../', 'public', 'users.xlsx');
           await createExelFile(usersData, filePath);
           
           return true
