@@ -1,7 +1,7 @@
 const orderModel = require('../models/order-model.js');
 const usersModel = require('../models/user-model.js');
 const productsModel = require('../models/product-model.js');
-const mongooseToXlsx = require('mongoose-to-xlsx');
+const createExelFile = require('../utils/exel-util.js');
 const path = require('path');
 
 class AnaliyticsService {
@@ -61,13 +61,10 @@ class AnaliyticsService {
     
     async getUserExel () {
           const users = await usersModel.find({});
-          const usersData = users.map(user => user.toJSON());
+          const usersData = users.toArray();
           
           const filePath = path.join(__dirname, '../', '../'. 'public', 'users.xlsx');
-          await mongooseToXlsx(usersData, filePath, fnuction (err, data) => {
-              if (err) console.log(err);
-              console.log('exel file saved');
-          });
+          await createExelFile(usersData, filePath);
           
           return true
     }
