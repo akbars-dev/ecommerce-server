@@ -1,4 +1,4 @@
-const ExelJs = require('exeljs');
+const ExelJs = require('exceljs');
 
 async function createExelFile (data, fileName) {
     const workbook = new ExelJs.Workbook();
