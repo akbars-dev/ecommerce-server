@@ -9,6 +9,7 @@ const discountRouter = require('./discount-router');
 const errorMiddleware = require('../middlewares/error-middleware');
 const analiyticsRouter = require('./analiytics-router.js');
 const historiesRouter = require('./histories-router.js');
+const adminRouter = require('./admin-router.js');
 
 
 const router = Router();
@@ -23,6 +24,7 @@ router.use('/discount', discountRouter);
 router.use('/histories', historiesRouter);
 router.use('/analiytics', analiyticsRouter);
 router.use('/auth', authRouter);
+router.use('/admin', adminRouter);
 router.use(errorMiddleware);
 
 module.exports = router;
