@@ -30,6 +30,7 @@ class AnaliyticsController {
                 { header: 'Buyurtmalar soni', key: 'ordersCount', width: 20 },    
             ];
             
+            console.log(data);
             data.topCustomers.forEach((val, index) => {
                 worksheet.addRow({
                     id: index+1,
