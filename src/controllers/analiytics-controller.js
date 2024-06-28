@@ -19,10 +19,12 @@ class AnaliyticsController {
             const fileName = 'users.xlsx';
             
             res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
-            res.setHeader('Content-Type', 'text/plain');
+            res.setHeader('Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             
             const fileStream = fs.createReadStream(filePath);
             fileStream.pipe(res);
+            res.end();
         } catch(e) {
             next(e);
         }
