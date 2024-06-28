@@ -1,7 +1,7 @@
 const analiyticsService = require('../service/analiytics-service.js');
 const path = require('path');
 const fs = require('fs');
-const EcxelJS = require('exceljs')
+const ExcelJS = require('exceljs');
 
 class AnaliyticsController {
     async top (req, res, next) {
