@@ -2,7 +2,7 @@ const ExcelJs = require('exceljs');
 
 async function createExelFile (data, fileName) {
     const workbook = new ExcelJs.Workbook();
-    const worksheet = workbook.addWorkSheet('USERS SHEET');
+    const worksheet = workbook.addWorksheet('USERS SHEET');
     
     const headers = Object.keys(data[0]);
     worksheet.addRow(headers);
