@@ -14,6 +14,7 @@ const router = require('./routes');
 
 const app = express();
 
+// app setup
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
