@@ -87,6 +87,7 @@ class UserService {
         const user = await userModel.findById(id);
         const cashback = await cashbackModel.findById(user.cashback);
         const admin = await adminModel.findById(id);
+        console.log('admin', admin)
         if (!admin) throw ApiError.UnauthorizedError();
         console.log(admin);
         if (type == "plus") {
