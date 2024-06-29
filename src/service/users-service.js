@@ -86,7 +86,7 @@ class UserService {
     async cashbackAction(id, balance, type, adminId) {
         const user = await userModel.findById(id);
         const cashback = await cashbackModel.findById(user.cashback);
-        const admin = await adminModel.findById(id);
+        const admin = await adminModel.findById(adminId);
         console.log('admin', admin)
         if (!admin) throw ApiError.UnauthorizedError();
         console.log(admin);
