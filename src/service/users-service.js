@@ -2,6 +2,7 @@ const ApiError = require('../errors/api-error');
 const cashbackModel = require('../models/cashback-model');
 const historyModel = require('../models/history-model');
 const userModel = require('../models/user-model');
+const adminModel = require('../models/admin-model.js')
 const { validateAccessToken } = require('./token-service');
 
 
@@ -82,14 +83,15 @@ class UserService {
         return results;
     }
 
-    async cashbackAction(id, balance, type, accessToken) {
+    async cashbackAction(id, balance, type, adminId) {
         const user = await userModel.findById(id);
         const cashback = await cashbackModel.findById(user.cashback);
-        const admin = await validateAccessToken(accessToken);
+        const admin = await adminModel.findById(id);
+        if (!admin) throw ApiError.UnauthorizedError();
         console.log(admin);
         if (type == "plus") {
             cashback.balance += Number(balance);
-            await historyModel.create({ admin: admin.id, amount: balance, type: type });
+            await historyModel.create({ admin: admin._id, amount: balance, type: type });
             await cashback.save();
             return cashback;
         } else if (type == "minus") {

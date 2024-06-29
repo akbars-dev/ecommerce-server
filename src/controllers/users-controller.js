@@ -38,13 +38,12 @@ class UserController {
 
     async cashbackAction(req, res, next) {
         try {
-            const { balance, type } = req.body;
-            const accessToken = await req.headers.authorization;
-            console.log(accessToken);
+            const { balance, type, userId } = req.body;
+            const adminId = await req.params.id;
 
-            if(!accessToken) throw ApiError.UnauthorizedError();
+            if(!adminId) throw ApiError.UnauthorizedError();
 
-            const data = await usersService.cashbackAction(req.params.id, balance, type, accessToken.split(' ')[1]);
+            const data = await usersService.cashbackAction(userId, balance, type, adminId);
 
             return res.json({ status: 200, message: "Cashback yangilandi", data: data });
         } catch (error) {
