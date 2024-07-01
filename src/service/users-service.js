@@ -89,7 +89,7 @@ class UserService {
         const cashback = await cashbackModel.findById(user.cashback);
         const admin = await adminModel.findById(adminId);
         
-        const token = '7421946636:AAEdGyXgYtv5vfBTjWhGme8dLezjkbx95oA';
+        const token = '7340703350:AAEb4Pc_aKsndM4kTE63O1pWzFZx_nBLlvY';
         
         console.log('admin', admin)
         if (!admin) throw ApiError.UnauthorizedError();
