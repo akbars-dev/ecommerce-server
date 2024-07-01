@@ -3,6 +3,7 @@ const cashbackModel = require('../models/cashback-model');
 const historyModel = require('../models/history-model');
 const userModel = require('../models/user-model');
 const adminModel = require('../models/admin-model.js')
+const axios = require('axios');
 const { validateAccessToken } = require('./token-service');
 
 
@@ -87,16 +88,30 @@ class UserService {
         const user = await userModel.findById(id);
         const cashback = await cashbackModel.findById(user.cashback);
         const admin = await adminModel.findById(adminId);
+        
+        const token = '7421946636:AAEdGyXgYtv5vfBTjWhGme8dLezjkbx95oA';
+        
         console.log('admin', admin)
         if (!admin) throw ApiError.UnauthorizedError();
         console.log(admin);
         if (type == "plus") {
-            cashback.balance += Number(balance) /100 * precent;
+            amount = Number(balance) / 100 * precent;
+            cashback.balance += amount;
+            await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+                chat_id: user.telegramId,
+                message: `🧍‍♂️Уважаемый ${user.firstName}\n🔄 Ваш баланс изменился.\n💰 Ваш баланс
+                на: ${amount}`
+            })
             await historyModel.create({ admin: admin._id, amount: balance, type: type });
             await cashback.save();
             return cashback;
         } else if (type == "minus") {
             cashback.balance -= Number(balance);
+            await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+                chat_id: user.telegramId,
+                message: `🧍‍♂️Уважаемый ${user.firstName}\n🔄 Ваш баланс изменился.\n💰 Ваш баланс на:
+                ${balance}`
+            })
             await historyModel.create({ admin: admin.id, amount: balance, type: type });
             await cashback.save();
             return cashback;

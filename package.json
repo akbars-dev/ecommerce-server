@@ -19,7 +19,8 @@
     "mongoose": "^8.4.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.3",
-    "exceljs": "^4.4.0"
+    "exceljs": "^4.4.0",
+    "axios":"^1.7.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.3"
