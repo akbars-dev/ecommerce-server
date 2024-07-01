@@ -95,7 +95,7 @@ class UserService {
         if (!admin) throw ApiError.UnauthorizedError();
         console.log(admin);
         if (type == "plus") {
-            amount = Number(balance) / 100 * precent;
+            const amount = Number(balance) / 100 * precent;
             cashback.balance += amount;
             await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
                 chat_id: user.telegramId,

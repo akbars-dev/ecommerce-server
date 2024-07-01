@@ -57,7 +57,7 @@ class AnaliyticsController {
     
     async getUserExel(req, res, next){
         try {
-            const data = await analiyticsService.getUserExel();
+            const data = await analiyticsService.getUserExcel();
             const filePath = path.join(__dirname, '../', '../', 'public', 'users.xlsx');
             const fileName = 'users.xlsx';
             const workbook = new ExcelJS.Workbook();
