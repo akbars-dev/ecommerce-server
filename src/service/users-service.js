@@ -83,7 +83,7 @@ class UserService {
         return results;
     }
 
-    async cashbackAction(id, balance, type, adminId) {
+    async cashbackAction(id, balance, type, adminId, precent=0) {
         const user = await userModel.findById(id);
         const cashback = await cashbackModel.findById(user.cashback);
         const admin = await adminModel.findById(adminId);
@@ -91,7 +91,7 @@ class UserService {
         if (!admin) throw ApiError.UnauthorizedError();
         console.log(admin);
         if (type == "plus") {
-            cashback.balance += Number(balance);
+            cashback.balance += Number(balance) /100 * precent;
             await historyModel.create({ admin: admin._id, amount: balance, type: type });
             await cashback.save();
             return cashback;
