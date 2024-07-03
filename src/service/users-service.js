@@ -99,7 +99,7 @@ class UserService {
             cashback.balance += amount;
             await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
                 chat_id: user.telegramId,
-                message: `🧍‍♂️Уважаемый ${user.firstName}\n🔄 Ваш баланс изменился.\n💰 Ваш баланс
+                text: `🧍‍♂️Уважаемый ${user.firstName}\n🔄 Ваш баланс изменился.\n💰 Ваш баланс
                 на: ${amount}`
             })
             await historyModel.create({ admin: admin._id, amount: balance, type: type });
@@ -109,7 +109,7 @@ class UserService {
             cashback.balance -= Number(balance);
             await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
                 chat_id: user.telegramId,
-                message: `🧍‍♂️Уважаемый ${user.firstName}\n🔄 Ваш баланс изменился.\n💰 Ваш баланс на:
+                text: `🧍‍♂️Уважаемый ${user.firstName}\n🔄 Ваш баланс изменился.\n💰 Ваш баланс на:
                 ${balance}`
             })
             await historyModel.create({ admin: admin.id, amount: balance, type: type });
