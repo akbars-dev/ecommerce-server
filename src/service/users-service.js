@@ -2,8 +2,9 @@ const ApiError = require('../errors/api-error');
 const cashbackModel = require('../models/cashback-model');
 const historyModel = require('../models/history-model');
 const userModel = require('../models/user-model');
-const adminModel = require('../models/admin-model.js')
+const adminModel = require('../models/admin-model.js');
 const axios = require('axios');
+const timeUtil = require('../utils/time-util.js')
 const { validateAccessToken } = require('./token-service');
 
 
@@ -84,34 +85,45 @@ class UserService {
         return results;
     }
 
-    async cashbackAction(id, balance, type, adminId, precent=0) {
+    async cashbackAction(id, balance, type, adminId, precent = 0) {
         const user = await userModel.findById(id);
         const cashback = await cashbackModel.findById(user.cashback);
         const admin = await adminModel.findById(adminId);
-        
+
         const token = '7340703350:AAEb4Pc_aKsndM4kTE63O1pWzFZx_nBLlvY';
-        
+
         console.log('admin', admin)
         if (!admin) throw ApiError.UnauthorizedError();
         console.log(admin);
         if (type == "plus") {
-            const amount = Number(balance) / 100 * precent;
             cashback.balance += amount;
-            await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
-                chat_id: user.telegramId,
-                text: `🧍‍♂️Уважаемый ${user.firstName}\n🔄 Ваш баланс изменился.\n💰 Ваш баланс
-                на: ${amount}`
-            })
+            if (user.lang == 'uz') {
+                await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    chat_id: user.telegramId,
+                    text: `🧍‍♂️Уважаемый ${user.firstName}\n🔄 Ваш баланс изменился.\n💰 Ваш баланс ${timeUtil()} на: ${cashback.balance}`
+                })
+            } else {
+                await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    chat_id: user.telegramId,
+                    text: `🧍‍♂️Xurmatli ${user.firstName}\n🔄 Sizning balansingiz o'zgardi.\n💰 Sizning ${timeUtil()} xolatiga ko'ra balansingiz: ${cashback.balance}`
+                })
+            }
             await historyModel.create({ admin: admin._id, amount: balance, type: type });
             await cashback.save();
             return cashback;
         } else if (type == "minus") {
             cashback.balance -= Number(balance);
-            await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
-                chat_id: user.telegramId,
-                text: `🧍‍♂️Уважаемый ${user.firstName}\n🔄 Ваш баланс изменился.\n💰 Ваш баланс на:
-                ${balance}`
-            })
+            if (user.lang == 'uz') {
+                await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    chat_id: user.telegramId,
+                    text: `🧍‍♂️Уважаемый ${user.firstName}\n🔄 Ваш баланс изменился.\n💰 Ваш баланс ${timeUtil()} на: ${cashback.balance}`
+                })
+            } else {
+                await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+                    chat_id: user.telegramId,
+                    text: `🧍‍♂️Xurmatli ${user.firstName}\n🔄 Sizning balansingiz o'zgardi.\n💰 Sizning ${timeUtil()} xolatiga ko'ra balansingiz: ${cashback.balance}`
+                })
+            }
             await historyModel.create({ admin: admin.id, amount: balance, type: type });
             await cashback.save();
             return cashback;
