@@ -14,7 +14,7 @@ class SubCategoriesService {
 
     async update(id, data) {
         const condidation = await subCateogriesModel.findByIdAndUpdate(id, data, { new: true });
-        if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi'); 
+        if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi');
 
         return condidation;
     }
@@ -22,6 +22,8 @@ class SubCategoriesService {
     async delete(id) {
         const condidation = await subCateogriesModel.findByIdAndDelete(id);
         if (!condidation) throw ApiError.BadRequest('Aydi xato kiritildi');
+
+        await productModel.deleteMany({ subCategory: condidation._id });
 
         return condidation;
     }

@@ -24,7 +24,7 @@ class CategoriesController {
 
     async delete(req, res, next) {
         try {
-            const category = await categoriesService.delete(req.params.id);
+            const category = await categoriesService.delete(req.params.id); 
             return res.json({ status: 200, message: 'Kategoriya ochirildi', data: category });
         } catch (error) {
             next(error);

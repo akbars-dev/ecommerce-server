@@ -24,6 +24,9 @@ class CategoriesService {
     async delete(id) {
         const condidation = await categoriesModel.findByIdAndDelete(id);
         if (!condidation) throw ApiError.BadRequest('Aydi xato kiritilgan');
+        await productsModel.deleteMany({ category: condidation._id });
+        await subCateogriesModel.deleteMany({ category: condidation._id });
+
 
         return condidation;
     }
