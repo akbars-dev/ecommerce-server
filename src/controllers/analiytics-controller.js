@@ -54,6 +54,42 @@ class AnaliyticsController {
             next(e);
         }
     }
+
+    async getTopProductsExcel(req, res, next) {
+        try {
+            const data = await analiyticsService.top();
+            
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Top Products');
+            
+            worksheet.columns = [
+                { header: 'ID', key: 'id', width: 10 },    
+                { header: 'Mahsulot nomi', key: 'name', width: 20 },    
+                { header: 'Mahsulot narxi', key: 'price', width: 20 },    
+                { header: 'Sotuvlar soni', key: 'ordersCount', width: 20 },    
+            ];
+            
+            console.log(data);
+            data.topProducts.forEach((val, index) => {
+                worksheet.addRow({
+                    id: index+1,
+                    name: val.name,
+                    price: val.price,
+                    ordersCount: val.ordersCount,
+                });
+            })
+            
+            res.setHeader('Content-Disposition', `attachment; filename=topProducts.xlsx`);
+            res.setHeader('Content-Type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            
+            
+        await workbook.xlsx.write(res);
+
+        return res.end();
+        } catch(e) {
+            next(e);
+        }
+    }
     
     async getUserExel(req, res, next){
         try {

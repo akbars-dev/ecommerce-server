@@ -57,7 +57,10 @@ class AnalyticsService {
                     _id: 1,
                     ordersCount: 1,
                     firstName: '$user.firstName',
-                    telephone: '$user.telephone'
+                    lastName: '$user.lastName',
+                    telephone: '$user.telephone',
+                    lang: '$user.lang',
+                    birthdayDate: '$user.birthdayDate',
                 }
             },
             {
