@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 class OrderService {
     async create(products, userId, price) {
         const user = await userModel.findByIdAndUpdate(userId, {$inc: { ordersCount: 1 }}, {new: true});
-        const onePercent = Number(price.split('$')[0]) * 0.01;
+        const onePercent = Number(price) * 0.01;
         if (!user) throw ApiError.BadRequest('User aydi xato kiritildi');
         const cashback = await cashbackModel.findById(user.cashback);
         console.log(user.cashback)
