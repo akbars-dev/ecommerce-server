@@ -134,7 +134,7 @@ class UserService {
         const user = await userModel.findOne({ telegramId: userId }).populate('cashback');
         if (!user) throw ApiError.BadRequest('User topilmadi');
 
-        return { firstName: user.firstName, lastName: user.lastName, barCode: user.cashback.barCode, cashbackBall: user.cashback.balance };
+        return { id: user._id, firstName: user.firstName, lastName: user.lastName, barCode: user.cashback.barCode, cashbackBall: user.cashback.balance };
     }
 
     async getUserLang(userId) {
