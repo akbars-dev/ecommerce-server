@@ -60,6 +60,16 @@ class UserController {
         }
     }
 
+    
+    async deleteUser(req, res, next) {
+        try {
+            const data = await usersService.deleteUser(req.params.id);
+            return res.json({ status: 200, message: "User o'chirib tashlandi", data: data });
+        } catch (error) {
+            next(error)
+        }
+    }
+
     async all(req, res, next) {
         try {
             const data = await usersService.all();
