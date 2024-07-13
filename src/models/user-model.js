@@ -6,7 +6,7 @@ const UserSchema = new Schema({
     telephone: { type: String, required: true },
     telegramId: { type: String, required: true },
     lang: { type: String, required: true },
-    ordersCount: { type: Number, required: true },
+    ordersCount: { type: Number, required: true, default: 0 },
     birthdayDate: { type: String, required: true },
     cashback: { type: Schema.Types.ObjectId, ref: 'cashback' },
 });
