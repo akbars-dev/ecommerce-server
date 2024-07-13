@@ -74,7 +74,7 @@ class AnaliyticsController {
                 worksheet.addRow({
                     id: index+1,
                     name: val.productName,
-                    price: val.price,
+                    price: val.price[0],
                     ordersCount: val.orderCounts,
                 });
             })
