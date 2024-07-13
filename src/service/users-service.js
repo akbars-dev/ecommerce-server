@@ -160,9 +160,9 @@ class UserService {
     }
 
     async deleteUser(userId) {
-        const data = userModel.findOneAndDelete({ telegramId: userId });
+        const data = await userModel.findOneAndDelete({ telegramId: userId });
         if (!data) throw ApiError.BadRequest('User topilmadi');
-        
+
         return true;
     }
 
