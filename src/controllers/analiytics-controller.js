@@ -73,9 +73,9 @@ class AnaliyticsController {
             data.topProducts.forEach((val, index) => {
                 worksheet.addRow({
                     id: index+1,
-                    name: val.name,
+                    name: val.productName,
                     price: val.price,
-                    ordersCount: val.ordersCount,
+                    ordersCount: val.orderCounts,
                 });
             })
             
