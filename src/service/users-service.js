@@ -145,7 +145,7 @@ class UserService {
     }
 
     async getTelegramId() {
-        const usersTelegramID = await userModel.find().select('telegramId');
+        const usersTelegramID = await userModel.find({}).select('telegramId');
         return usersTelegramID
     }
 

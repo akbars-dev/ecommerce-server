@@ -5,20 +5,31 @@ const productModel = require("../models/product-model");
 const userModel = require("../models/user-model");
 const mongoose = require('mongoose');
 
-
 class OrderService {
     async create(products, userId, price) {
-        const user = await userModel.findByIdAndUpdate(userId, {$inc: { ordersCount: 1 }}, {new: true});
-        const onePercent = Number(price) * 0.01;
-        if (!user) throw ApiError.BadRequest('User aydi xato kiritildi');
-        const cashback = await cashbackModel.findById(user.cashback);
-        console.log(user.cashback)
-        if (!cashback) throw ApiError.BadRequest('User aydi xato kiritildi');
-        products.forEach(async (val) => {
-            await productModel.findByIdAndUpdate(val, { ordersCount: {$inc: 1 } }, {new: true})
-        })
-        const order = await orderModel.create({ products: products, price: price, author: userId });
+        const user = await userModel.findByIdAndUpdate(
+            userId,
+            { $inc: { ordersCount: 1 } },
+            { new: true }
+        );
 
+        const onePercent = Number(price) * 0.01;
+        if (!user) throw ApiError.BadRequest('User ID is incorrect');
+        const cashback = await cashbackModel.findById(user.cashback);
+        console.log(user.cashback);
+        if (!cashback) throw ApiError.BadRequest('User ID is incorrect');
+
+        // Corrected the use of $inc here
+        for (const val of products) {
+            console.log(val);
+            await productModel.findByIdAndUpdate(
+                val,
+                { $inc: { ordersCount: 1 } },
+                { new: true }
+            );
+        }
+
+        const order = await orderModel.create({ products: products, price: price, author: userId });
 
         cashback.balance += onePercent;
         await cashback.save();
@@ -30,7 +41,10 @@ class OrderService {
             const orders = await orderModel.find({}).populate('author');
             return orders;
         }
-        const orders = await orderModel.find({}).skip((page - 1) * limit).limit(limit).popoulate('author');
+        const orders = await orderModel.find({})
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .populate('author');
         return orders;
     }
 
@@ -52,7 +66,7 @@ class OrderService {
                 }
             }
         ]);
-        if (!order) throw ApiError.BadRequest('Aydi xato kiritildi');
+        if (!order) throw ApiError.BadRequest('ID is incorrect');
         return order[0];
     }
 }
