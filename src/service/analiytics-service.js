@@ -55,7 +55,8 @@ class AnalyticsService {
                 $project: {
                     _id: 1,
                     ordersCount: 1,
-                    userName: '$user.name'
+                    firstName: '$user.firstName',
+                    telephone: '$user.telephone'
                 }
             },
             {
