@@ -6,6 +6,7 @@ const adminModel = require('../models/admin-model.js');
 const axios = require('axios');
 const timeUtil = require('../utils/time-util.js')
 const { validateAccessToken } = require('./token-service');
+const orderModel = require('../models/order-model.js');
 
 
 
@@ -162,6 +163,8 @@ class UserService {
     async deleteUser(userId) {
         const data = await userModel.findOneAndDelete({ telegramId: userId });
         if (!data) throw ApiError.BadRequest('User topilmadi');
+
+        await orderModel.deleteMany({ author: data._id });
 
         return true;
     }
