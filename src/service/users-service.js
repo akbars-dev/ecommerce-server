@@ -92,6 +92,7 @@ class UserService {
         const admin = await adminModel.findById(adminId);
 
         const token = '7340703350:AAEb4Pc_aKsndM4kTE63O1pWzFZx_nBLlvY';
+        const amount = balance / 100 *2; 
 
         console.log('admin', admin)
         if (!admin) throw ApiError.UnauthorizedError();
@@ -113,7 +114,7 @@ class UserService {
             await cashback.save();
             return cashback;
         } else if (type == "minus") {
-            cashback.balance -= Number(balance);
+            cashback.balance -= Number(amount);
             if (user.lang == 'uz') {
                 await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
                     chat_id: user.telegramId,
